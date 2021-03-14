@@ -1,5 +1,5 @@
 p {
-    font-family: Arial;
+    font-family: arial;
 }
 
 h1 {
@@ -8,4 +8,13 @@ h1 {
 
 .title {
     color: teal;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+#article-title {
+    font-family: cursive;
+    text-transform: capitalize;
 }
