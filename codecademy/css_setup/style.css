@@ -14,6 +14,10 @@ h1 {
     text-transform: uppercase;
 }
 
+.publish-time {
+    color: gray;
+}
+
 #article-title {
     font-family: cursive;
     text-transform: capitalize;
