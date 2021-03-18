@@ -9,6 +9,15 @@ a:link {
     color:black;
 }
 
+a:hover {
+    color:white;
+    background-color: black;
+}
+
+hr {
+    border: 1.5px solid black
+}
+
 .marg_r3 {
     margin-right: 0.3em;
 }
@@ -73,7 +82,7 @@ main figure img {
 }
 
 main ul {
-    list-style-type: circle;
+    list-style-type: none;
 }
 
 /*footer*/
@@ -99,5 +108,9 @@ footer {
 @media screen and (max-width: 1280px) {
     header img.banner {
         width: 100vw;
+    }
+
+    main img.textimg {
+        width: 100%;
     }
 }
