@@ -6,11 +6,11 @@ body {
 
 a:visited,
 a:link {
-    color:black;
+    color: black;
 }
 
 a:hover {
-    color:white;
+    color: white;
     background-color: black;
 }
 
@@ -43,7 +43,7 @@ header p {
 .white,
 .white a:link,
 .white a:visited {
-    color:white;
+    color: white;
 }
 
 header nav img {
@@ -72,7 +72,7 @@ main figure {
 }
 
 main figure img {
-    border: 1px solid black 
+    border: 1px solid black
 }
 
 #map {
@@ -86,11 +86,11 @@ main ul {
 }
 
 /*footer*/
-footer .next{
-    float:right;
+footer .next {
+    float: right;
 }
 
-footer .back{
+footer .back {
     float: left;
 }
 
