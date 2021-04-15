@@ -23,9 +23,19 @@ let layerControl = L.control.layers({
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
+
 let awsLayer = L.featureGroup();
-layerControl.addOverlay(awsLayer, "Wetterstation Tirol");
-awsLayer.addTo(map);
+layerControl.addOverlay(awsLayer, "Wetterstationen Tirol");
+// awsLayer.addTo(map); // nicht in Karte darstellen
+
+let snowLayer = L.featureGroup();
+layerControl.addOverlay(snowLayer, "Schneehöhen");
+
+let windLayer = L.featureGroup();
+layerControl.addOverlay(windLayer, "Windgeschwindigkeiten");
+windLayer.addTo(map);
+
+
 
 fetch(awsUrl)
     .then(response => response.json())
@@ -43,9 +53,53 @@ fetch(awsUrl)
             <ul>
                 <li>Datum: ${formattedDate.toLocaleString("de")}</li>
                 <li>Temperatur: ${station.properties.LT} C°</li>
+                <li>Schneehöhe: ${station.properties.HS || '?'} cm</li>
+                <li>Seehöhe: ${station.geometry.coordinates[2]} Hm </li>
             </ul>
+            <a target=" blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(awsLayer);
+            // schneehöhen hervorheben
+            if (station.properties.HS) {
+                let highlightClass = '';
+                if (station.properties.HS > 100) {
+                    highlightClass = 'snow-100';
+                }
+                if (station.properties.HS > 200) {
+                    highlightClass = 'snow-200';
+                }
+                let snowIcon = L.divIcon({
+                    html: `<div class="snow-label ${highlightClass}">${station.properties.HS}</div>`
+                })
+                let snowMarker = L.marker([
+                    station.geometry.coordinates[1],
+                    station.geometry.coordinates[0]
+                ], {
+                    icon: snowIcon
+                });
+                snowMarker.addTo(snowLayer);
+            }
+
+            // windgeschwindigkeiten hervorheben
+            if (station.properties.WG) {
+                let windhighlightClass = '';
+                if (station.properties.WG > 2) {
+                    windhighlightClass = 'wind-2';
+                }
+                if (station.properties.WG > 6) {
+                    windhighlightClass = 'wind-6';
+                }
+                let windIcon = L.divIcon({
+                    html: `<div class="wind-label ${windhighlightClass}">${station.properties.WG}</div>`
+                })
+                let windMarker = L.marker([
+                    station.geometry.coordinates[1],
+                    station.geometry.coordinates[0]
+                ], {
+                    icon: windIcon
+                });
+                windMarker.addTo(windLayer);
+            }
         }
         // set map view to all stations
         map.fitBounds(awsLayer.getBounds());
