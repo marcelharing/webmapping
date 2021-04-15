@@ -44,6 +44,7 @@ for (let entry of ROUTE) {
     }
 }
 
+nav.options.selectedIndex = 8 -1;
 nav.onchange = (evt) => {
     let selected = evt.target.selectedIndex;
     let options = evt.target.options;
