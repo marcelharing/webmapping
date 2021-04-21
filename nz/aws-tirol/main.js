@@ -33,7 +33,10 @@ layerControl.addOverlay(snowLayer, "Schneehöhen");
 
 let windLayer = L.featureGroup();
 layerControl.addOverlay(windLayer, "Windgeschwindigkeiten");
-windLayer.addTo(map);
+
+let airLayer = L.featureGroup();
+layerControl.addOverlay(airLayer, "Lufttemperatur");
+airLayer.addTo(map);
 
 
 
@@ -62,6 +65,9 @@ fetch(awsUrl)
             // schneehöhen hervorheben
             if (station.properties.HS) {
                 let highlightClass = '';
+                if (station.properties.HS <= 100) {
+                    highlightClass = 'snow-0';
+                }
                 if (station.properties.HS > 100) {
                     highlightClass = 'snow-100';
                 }
@@ -69,7 +75,7 @@ fetch(awsUrl)
                     highlightClass = 'snow-200';
                 }
                 let snowIcon = L.divIcon({
-                    html: `<div class="snow-label ${highlightClass}">${station.properties.HS}</div>`
+                    html: `<div class="snow-air-wind-label ${highlightClass}">${station.properties.HS}</div>`
                 })
                 let snowMarker = L.marker([
                     station.geometry.coordinates[1],
@@ -90,7 +96,7 @@ fetch(awsUrl)
                     windhighlightClass = 'wind-6';
                 }
                 let windIcon = L.divIcon({
-                    html: `<div class="wind-label ${windhighlightClass}">${station.properties.WG}</div>`
+                    html: `<div class="snow-air-wind-label ${windhighlightClass}">${station.properties.WG}</div>`
                 })
                 let windMarker = L.marker([
                     station.geometry.coordinates[1],
@@ -100,6 +106,27 @@ fetch(awsUrl)
                 });
                 windMarker.addTo(windLayer);
             }
+
+            // Lufttemperatur hervorheben
+            if (station.properties.LT) {
+                let highlightClass = '';
+                if (station.properties.LT <= 0) {
+                    highlightClass = 'air-u0';
+                        }
+                if (station.properties.LT > 0) {
+                    highlightClass = 'air-a0';
+                        }
+                let airIcon = L.divIcon({
+                    html: `<div class="snow-air-wind-label ${highlightClass}">${station.properties.LT}</div>`
+                            })
+                let airMarker = L.marker([
+                    station.geometry.coordinates[1],
+                    station.geometry.coordinates[0]
+                        ], {
+                    icon: airIcon
+                        });
+                    airMarker.addTo(airLayer);
+                        }
         }
         // set map view to all stations
         map.fitBounds(awsLayer.getBounds());
