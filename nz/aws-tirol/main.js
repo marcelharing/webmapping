@@ -1,5 +1,6 @@
 let basemapGray = L.tileLayer.provider('BasemapAT.grau')
 
+//https://leafletjs.com/reference-1.7.1.html#map-l-map >>karte initialisieren
 let map = L.map("map", {
 center: [47, 11],
 zoom: 9,
@@ -7,6 +8,10 @@ layers: [
     basemapGray
 ]
 })
+
+// https://leafletjs.com/reference-1.7.1.html#control-layers >>Layercontrol erzeugen
+// https://leafletjs.com/reference-1.7.1.html#tilelayer >>Layercontrol wird mit Tilelayer gefüllt, 
+// Tilelayererzeugung mit providers extension https://github.com/leaflet-extras/leaflet-providers
 
 let layerControl = L.control.layers({
     "BasemapAT.grau": basemapGray,
@@ -23,7 +28,7 @@ let layerControl = L.control.layers({
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
-
+// https://leafletjs.com/reference-1.7.1.html#featuregroup >> Feature Group Layer initialisieren; erweiterte Layer Group
 let awsLayer = L.featureGroup();
 layerControl.addOverlay(awsLayer, "Wetterstationen Tirol");
 // awsLayer.addTo(map); // nicht in Karte darstellen
@@ -39,7 +44,8 @@ layerControl.addOverlay(airLayer, "Lufttemperatur");
 airLayer.addTo(map);
 
 
-
+// https://leafletjs.com/reference-1.7.1.html#marker >> Marker mit dazugehörigem Icon auf Karte hinzufügen
+// https://leafletjs.com/reference-1.7.1.html#divicon div element als Icon, erbt von Standardicon
 fetch(awsUrl)
     .then(response => response.json())
     .then(json => {
@@ -62,6 +68,7 @@ fetch(awsUrl)
             <a target=" blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
             `);
             marker.addTo(awsLayer);
+
             // schneehöhen hervorheben
             if (station.properties.HS) {
                 let highlightClass = '';
