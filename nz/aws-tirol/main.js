@@ -2,11 +2,11 @@ let basemapGray = L.tileLayer.provider('BasemapAT.grau')
 
 //https://leafletjs.com/reference-1.7.1.html#map-l-map >>karte initialisieren
 let map = L.map("map", {
-center: [47, 11],
-zoom: 9,
-layers: [
-    basemapGray
-]
+    center: [47, 11],
+    zoom: 9,
+    layers: [
+        basemapGray
+    ]
 });
 
 // https://leafletjs.com/reference-1.7.1.html#control-layers >>Layercontrol erzeugen
@@ -18,7 +18,8 @@ let overlays = {
     temperature: L.featureGroup(),
     snowheight: L.featureGroup(),
     windspeed: L.featureGroup(),
-    winddirection: L.featureGroup()
+    winddirection: L.featureGroup(),
+    humidity: L.featureGroup()
 };
 
 
@@ -37,15 +38,43 @@ let layerControl = L.control.layers({
     "Temperatur (°C)": overlays.temperature,
     "Schneehöhe (cm)": overlays.snowheight,
     "Windgeschwindigkeit (km/h)": overlays.windspeed,
-    "Windrichtung": overlays.winddirection
-},{
+    "Windrichtung": overlays.winddirection,
+    "Luftfeuchte": overlays.humidity
+}, {
     collapsed: false
-},).addTo(map);
+}, ).addTo(map);
 
 L.control.scale({
     imperial: false,
     updateWhenIdle: false
 }).addTo(map);
+
+// Farbpaletten Funktion
+let getColor = (value, colorRamp) => {
+    //console.log("Wert:", value, "Palette:", colorRamp);
+    for (let rule of colorRamp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.col;
+        }
+    }
+    return "black";
+};
+
+// newLabel Funktion stellt Wetterstationen dar
+let newLabel = (coords, options) => {
+    let color = getColor(options.value, options.colors);
+    //console.log("Wert", options.value, "bekommt Farbe", color);
+    let label = L.divIcon({
+        html: `<div style="background-color:${color}">${options.value}</div>`,
+        className: "text-label"
+    })
+    let marker = L.marker([coords[1], coords[0]], {
+        icon: label,
+        title: `${options.station} (${coords[2]}m)`
+    });
+    return marker;
+};
+
 
 let awsUrl = 'https://wiski.tirol.gv.at/lawine/produkte/ogd.geojson';
 
@@ -77,69 +106,53 @@ fetch(awsUrl)
 
             // schneehöhen hervorheben
             if (typeof station.properties.HS == "number") {
-                let highlightClass = '';
-                if (station.properties.HS <= 100) {
-                    highlightClass = 'snow-0';
-                }
-                if (station.properties.HS > 100) {
-                    highlightClass = 'snow-100';
-                }
-                if (station.properties.HS > 200) {
-                    highlightClass = 'snow-200';
-                }
-                let snowIcon = L.divIcon({
-                    html: `<div class="snow-air-wind-label ${highlightClass}">${station.properties.HS}</div>`
-                })
-                let snowMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: snowIcon
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.HS.toFixed(0),
+                    colors: COLORS.snowheight,
+                    station: station.properties.name
                 });
-                snowMarker.addTo(overlays.snowheight);
+                marker.addTo(overlays.snowheight);
             }
 
             // windgeschwindigkeiten hervorheben
             if (typeof station.properties.WG == "number") {
-                let windhighlightClass = '';
-                if (station.properties.WG > 2) {
-                    windhighlightClass = 'wind-2';
-                }
-                if (station.properties.WG > 6) {
-                    windhighlightClass = 'wind-6';
-                }
-                let windIcon = L.divIcon({
-                    html: `<div class="snow-air-wind-label ${windhighlightClass}">${station.properties.WG}</div>`
-                })
-                let windMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                ], {
-                    icon: windIcon
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.WG.toFixed(0),
+                    colors: COLORS.windspeed,
+                    station: station.properties.name
                 });
-                windMarker.addTo(overlays.windspeed);
+                marker.addTo(overlays.windspeed);
             }
 
             // Lufttemperatur hervorheben
-            if (typeof station.properties.LT == "number") { //typeof: abfrage nur wenn nummer
-                let highlightClass = '';
-                if (station.properties.LT <= 0) {
-                    highlightClass = 'air-u0';
-                        }
-                if (station.properties.LT > 0) {
-                    highlightClass = 'air-a0';
-                        }
-                let airIcon = L.divIcon({
-                    html: `<div class="snow-air-wind-label ${highlightClass}">${station.properties.LT}</div>`
-                            })
-                let airMarker = L.marker([
-                    station.geometry.coordinates[1],
-                    station.geometry.coordinates[0]
-                        ], {
-                    icon: airIcon
-                        });
-                    airMarker.addTo(overlays.temperature);
-                        }
+            if (typeof station.properties.LT == "number") {
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.LT.toFixed(1),
+                    colors: COLORS.temperature,
+                    station: station.properties.name
+                });
+                marker.addTo(overlays.temperature);
+            }
+
+            // Luftfeuchte hervorheben
+            if (typeof station.properties.RH == "number") {
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.RH.toFixed(1),
+                    colors: COLORS.humidity,
+                    station: station.properties.name
+                });
+                marker.addTo(overlays.humidity);
+            }
+
+            /* Windrichtung hervorheben   
+            if (typeof station.properties.WR == "number") {
+                let marker = newLabel(station.geometry.coordinates, {
+                    value: station.properties.WR,
+                    colors: COLORS.temperature,
+                    station: station.properties.name
+                });
+                marker.addTo(overlays.winddirection); 
+            }        */
         }
         // set map view to all stations
         map.fitBounds(overlays.stations.getBounds());

@@ -9,43 +9,41 @@ h2 {
     margin: auto;
 }
 
-.snow-air-wind-label {
+.snow-label,
+.wind-label {
     font-size: 1.25em;
     font-weight: bold;
     display: inline;
     padding: 0.3em;
     border: 1px solid gray;
     background-color: silver;
-    text-shadow: 
-    -1px -1px 0 white
-    -1px -1px 0 white
-    -1px -1px 0 white
-    -1px -1px 0 white
-    ;
-}
-.snow-0 {
-    background-color: rgb(211, 240, 253);
+    text-shadow:
+        -1px -1px 0 white,
+        -1px -1px 0 white,
+        -1px -1px 0 white,
+        -1px -1px 0 white;
 }
 
-.snow-100 {
-    background-color: rgb(104, 207, 255);
+.snow-100,
+.wind-10 {
+    background-color: blue;
 }
 
-.snow-200 {
-    background-color: rgb(0, 174, 255);
+.snow-200,
+.wind-20 {
+    background-color: red;
 }
 
-.wind-2 {
-    background-color: rgb(201, 153, 255);
-}
-
-.wind-6 {
-    background-color: rgb(252, 189, 138);
-}
-
-.air-u0 {
-    background-color: cornflowerblue;
-}
-.air-a0 {
-    background-color: tomato;
+.text-label div {
+    font-size: 1.25em;
+    font-weight: bold;
+    display: inline;
+    padding: 0.3em;
+    border: 1px solid gray;
+    background-color: silver;
+    text-shadow:
+        -1px -1px 0 white,
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
 }
