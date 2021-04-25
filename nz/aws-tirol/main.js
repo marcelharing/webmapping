@@ -49,6 +49,20 @@ L.control.scale({
     updateWhenIdle: false
 }).addTo(map);
 
+/* Rainfall Plugin */
+L.control.rainviewer({
+    position: 'bottomright',
+    nextButtonText: '>',
+    playStopButtonText: 'Start/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Zeit:",
+    opacitySliderLabelText: "Transparenz:",
+    animationInterval: 800,
+    opacity: 0.7
+}).addTo(map);
+
+
+
 // Farbpaletten Funktion
 let getColor = (value, colorRamp) => {
     //console.log("Wert:", value, "Palette:", colorRamp);
