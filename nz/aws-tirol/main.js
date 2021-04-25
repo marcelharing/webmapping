@@ -60,6 +60,16 @@ let getColor = (value, colorRamp) => {
     return "black";
 };
 
+// Funktion Windrichtung 
+let getDirection = (value, windDirection) => {
+    //console.log("Wert:", value, "Palette:", colorRamp);
+    for (let rule of windDirection) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.dir;
+        }
+    }
+};
+
 // newLabel Funktion stellt Wetterstationen dar
 let newLabel = (coords, options) => {
     let color = getColor(options.value, options.colors);
@@ -98,6 +108,8 @@ fetch(awsUrl)
                 <li>Datum: ${formattedDate.toLocaleString("de")}</li>
                 <li>Temperatur: ${station.properties.LT} C°</li>
                 <li>Schneehöhe: ${station.properties.HS || '?'} cm</li>
+                <li>Luftfeuchte: ${station.properties.RH || '?'} %</li>
+                <li>Windrichtung: ${getDirection(station.properties.WR, DIRECTIONS) || '?'}</li>
                 <li>Seehöhe: ${station.geometry.coordinates[2]} Hm </li>
             </ul>
             <a target=" blank" href="https://wiski.tirol.gv.at/lawine/grafiken/1100/standard/tag/${station.properties.plot}.png">Grafik</a>
