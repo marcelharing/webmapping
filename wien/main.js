@@ -48,20 +48,32 @@ overlays.busLines.addTo(map);
 overlays.busStops.addTo(map);
 overlays.pedAreas.addTo(map);
 
-fetch("data/TOURISTIKHTSVSLOGD.json")
-    .then(response => response.json())
-    .then(stations => {
-        L.geoJson(stations, {
-            onEachFeature:(feature, layer) => {
-                layer.bindPopup(feature.properties.STAT_NAME)
-            },
-            pointToLayer: (geoJson,latlng) => {
-                return L.marker(latlng, {
-                    icon: L.icon({
-                        iconUrl: 'icons/busstop.png',
-                        iconSize: [34,34]
-                    })
+let drawBusStop = (geojsonData) => {
+    L.geoJson(geojsonData, {
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(`<strong>${feature.properties.STAT_NAME}<hr></strong>
+            Station: ${feature.properties.LINE_NAME}`)
+        },
+        pointToLayer: (geoJsonPoint, latlng) => {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'icons/busstop.png',
+                    iconSize: [34, 34]
                 })
+            })
+        },
+        attribution: '<a href=https://data.wien.gv.at>Stadt Wien</a> - <a href=https://mapicons.mapsmarker.com/> Mapsmarker</a>'
+    }).addTo(overlays.busStops);
+}
+
+for (let config of OGDWIEN) {
+    console.log("Config: ", config.data);
+    fetch(config.data)
+        .then(response => response.json())
+        .then(geojsonData => {
+            console.log("Data: ", geojsonData);
+            if (config.title == "Haltestellen Vienna Sightseeing") {
+                drawBusStop(geojsonData);
             }
-        }).addTo(map);
-    })
+        })
+}
