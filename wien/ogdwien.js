@@ -9,6 +9,10 @@ const OGDWIEN = [{
     title: "Haltestellen Vienna Sightseeing",
     source: "https://www.data.gv.at/katalog/dataset/c3c95669-2a4d-4710-8e95-6a9fce6d131e",
     data: "data/TOURISTIKHTSVSLOGD.json"
+},{
+    title: "Sehenswürdigkeiten Wien",
+    source: "https://www.data.gv.at/katalog/dataset/f4e80988-c139-4953-8176-b3d6d03f6449",
+    data: "data/SEHENSWUERDIGOGD.json"
 }, {
     title: "Fußgängerzonen",
     source: "https://www.data.gv.at/katalog/dataset/946a1d1c-27ea-49d4-93be-9ac68b399a20",

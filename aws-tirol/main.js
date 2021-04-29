@@ -43,6 +43,7 @@ let layerControl = L.control.layers({
 }, {
     collapsed: false
 }, ).addTo(map);
+overlays.temperature.addTo(map);
 
 L.control.scale({
     imperial: false,
