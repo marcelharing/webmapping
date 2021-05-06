@@ -150,3 +150,6 @@ for (let config of OGDWIEN) {
             }
         })
 }
+
+// Leaflet
+L.hash(map);
