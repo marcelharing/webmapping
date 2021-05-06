@@ -164,6 +164,11 @@ var miniMap = new L.Control.MiniMap(L.tileLayer.provider("BasemapAT.basemap"), {
 ).addTo(map);
 
 //reachability plugin
+let styleIntervals  = (feature) => {
+    console.log(feature.properties);
+}
+
+
 L.control.reachability({
     apiKey: "5b3ce3597851110001cf6248c8dd4e5431a048b19580e80f41d71ddf",
     drawButtonContent: '',
@@ -181,5 +186,6 @@ L.control.reachability({
     travelModeButton3Content: '',
     travelModeButton3StyleClass: 'fa fa-male fa-2x',
     travelModeButton4Content: '',
-    travelModeButton4StyleClass: 'fa fa-wheelchair fa-2x'
+    travelModeButton4StyleClass: 'fa fa-wheelchair fa-2x',
+    styleFN: styleIntervals
 }).addTo(map);
