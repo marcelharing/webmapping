@@ -46,6 +46,7 @@ let layerControl = L.control.layers({
     "Sehenswürdigkeiten": overlays.sightseeing
 }).addTo(map);
 
+
 // alle Overlays nach dem Laden anzeigen
 overlays.busLines.addTo(map);
 overlays.busStops.addTo(map);
@@ -152,5 +153,12 @@ for (let config of OGDWIEN) {
         })
 }
 
-// Leaflet
+// Leaflet Hash
 L.hash(map);
+
+// Leaflet Minimap
+var miniMap = new L.Control.MiniMap(L.tileLayer.provider("BasemapAT.basemap"), {
+    toggleDisplay : true,
+    minimized: true,
+}
+).addTo(map);
