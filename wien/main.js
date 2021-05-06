@@ -162,3 +162,9 @@ var miniMap = new L.Control.MiniMap(L.tileLayer.provider("BasemapAT.basemap"), {
     minimized: true,
 }
 ).addTo(map);
+
+//reachability plugin
+L.control.reachability({
+    // add settings/options here
+    apiKey: "5b3ce3597851110001cf6248c8dd4e5431a048b19580e80f41d71ddf"
+}).addTo(map);
