@@ -164,13 +164,27 @@ var miniMap = new L.Control.MiniMap(L.tileLayer.provider("BasemapAT.basemap"), {
 ).addTo(map);
 
 //reachability plugin
-let styleIntervals  = (feature) => {
-    console.log(feature.properties);
-}
+let styleIntervals = (feature) => {
+    let color = "";
+    let range = feature.properties.Range;
+    if (feature.properties.Measure === "time") {
+        color = COLORS.minutes[range];
+    } else if (feature.properties.Measure === "distance") {
+        color = COLORS.kilometers[range];
+    } else {
+        color = "black";
+    }
+    return {
+        color: color,
+        opacity: 0.5,
+        fillOpacity: 0.2
+    }; 
+};
 
 
 L.control.reachability({
     apiKey: "5b3ce3597851110001cf6248c8dd4e5431a048b19580e80f41d71ddf",
+    styleFn: styleIntervals,
     drawButtonContent: '',
     drawButtonStyleClass: 'fa fa-pencil-alt fa-2x',
     deleteButtonContent: '',
@@ -187,5 +201,6 @@ L.control.reachability({
     travelModeButton3StyleClass: 'fa fa-male fa-2x',
     travelModeButton4Content: '',
     travelModeButton4StyleClass: 'fa fa-wheelchair fa-2x',
-    styleFN: styleIntervals
+    
 }).addTo(map);
+
