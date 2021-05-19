@@ -4,6 +4,7 @@ let basemapGray = L.tileLayer.provider('BasemapAT.grau')
 let map = L.map("map", {
     center: [47, 11],
     zoom: 9,
+    fullscreenControl: true,
     layers: [
         basemapGray
     ]
@@ -60,6 +61,15 @@ L.control.rainviewer({
     opacitySliderLabelText: "Transparenz:",
     animationInterval: 800,
     opacity: 0.7
+}).addTo(map);
+
+
+// Leaflet Minimap
+
+var miniMap = new L.Control.MiniMap(L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"), {
+    toggleDisplay: true,
+    minimized: false,
+    position: 'bottomleft',
 }).addTo(map);
 
 

@@ -13,6 +13,7 @@ console.log(stop.name);
 const map = L.map("map", {
     // center: [stop.lat, stop.lng],
     // zoom: 13,
+    fullscreenControl: true,
     layers: [
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
     ]
@@ -44,7 +45,7 @@ for (let entry of ROUTE) {
     }
 }
 
-nav.selectedIndex = 8 -1;
+nav.selectedIndex = 8 - 1;
 nav.onchange = (evt) => {
     let selected = evt.target.selectedIndex;
     let options = evt.target.options;
@@ -57,3 +58,10 @@ nav.onchange = (evt) => {
 };
 
 //console.log(document.querySelector("#map"));
+
+// Leaflet Minimap
+
+var miniMap = new L.Control.MiniMap(L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"), {
+    toggleDisplay: true,
+    minimized: false,
+}).addTo(map);
