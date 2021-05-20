@@ -43,6 +43,13 @@ let layerControl = L.control.layers({
 // Overlay mit GPX-Track anzeigen
 overlays.tracks.addTo(map);
 
+const elevationControl = L.control.elevation({
+    elevationDiv: "#profile",
+    followMarker: false,
+    theme: 'lime-theme'
+
+}).addTo(map);
+
 const drawTrack = (nr) => {
     let gpxTrack = new L.GPX(`tracks/${nr}.gpx`, {
         async: true,
@@ -59,8 +66,22 @@ const drawTrack = (nr) => {
     gpxTrack.on("loaded", () =>{
         console.log('loaded.gpx');
         map.fitBounds(gpxTrack.getBounds());
+        gpxTrack.bindPopup(`
+        <h3>${gpxTrack.get_name()}</h3>
+        <ul>
+            <li> Streckenlänge</li>
+            <li>tiefster Punkt</li>
+        </ul>
+        `);
+
+
+
     })
+    elevationControl.load(`tracks/${nr}.gpx`);
 };
+
 
 const selectedTrack = 28;
 drawTrack(selectedTrack);
+
+console.log('biketirol', BIKETIROL)
