@@ -84,4 +84,9 @@ const drawTrack = (nr) => {
 const selectedTrack = 28;
 drawTrack(selectedTrack);
 
-console.log('biketirol', BIKETIROL)
+console.log('biketirol', BIKETIROL);
+let pulldown = document.querySelector("#pulldown")
+console.log('Pulldown:', pulldown);
+for (let track of BIKETIROL) {
+    pulldown.innerHTML += `<option>${track.nr}</option>`
+}
