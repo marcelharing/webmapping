@@ -71,11 +71,11 @@ const drawTrack = (nr) => {
         gpxTrack.bindPopup(`
         <h3>${gpxTrack.get_name()}</h3>
         <ul>
-        <li>Streckenlänge: ${gpxTrack.get_distance()} m</li>
-        <li>tiefster Punkt: ${gpxTrack.get_elevation_min()} m</li>
-        <li>höchster Punkt: ${gpxTrack.get_elevation_max()} m</li>
-        <li>Höhenmeter bergauf: ${gpxTrack.get_elevation_gain()} m</li>
-        <li>Höhenmeter bergab: ${gpxTrack.get_elevation_loss()} m</li>
+        <li>Streckenlänge: ${Math.round(gpxTrack.get_distance())} m</li>
+        <li>tiefster Punkt: ${Math.round(gpxTrack.get_elevation_min())} m</li>
+        <li>höchster Punkt: ${Math.round(gpxTrack.get_elevation_max())} m</li>
+        <li>Höhenmeter bergauf: ${Math.round(gpxTrack.get_elevation_gain())} m</li>
+        <li>Höhenmeter bergab: ${Math.round(gpxTrack.get_elevation_loss())} m</li>
         </ul>
         `);
 
