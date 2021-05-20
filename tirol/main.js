@@ -51,6 +51,8 @@ const elevationControl = L.control.elevation({
 }).addTo(map);
 
 const drawTrack = (nr) => {
+    elevationControl.clear();
+    overlays.tracks.clearLayers();
     let gpxTrack = new L.GPX(`tracks/${nr}.gpx`, {
         async: true,
         marker_options: {
@@ -60,21 +62,22 @@ const drawTrack = (nr) => {
         },
         polyline_options: {
             color: 'black',
-            dashArray: [2,5],
+            dashArray: [2, 5],
         },
     }).addTo(overlays.tracks);
-    gpxTrack.on("loaded", () =>{
+    gpxTrack.on("loaded", () => {
         console.log('loaded.gpx');
         map.fitBounds(gpxTrack.getBounds());
         gpxTrack.bindPopup(`
         <h3>${gpxTrack.get_name()}</h3>
         <ul>
-            <li> Streckenlänge</li>
-            <li>tiefster Punkt</li>
+        <li>Streckenlänge: ${gpxTrack.get_distance()} m</li>
+        <li>tiefster Punkt: ${gpxTrack.get_elevation_min()} m</li>
+        <li>höchster Punkt: ${gpxTrack.get_elevation_max()} m</li>
+        <li>Höhenmeter bergauf: ${gpxTrack.get_elevation_gain()} m</li>
+        <li>Höhenmeter bergab: ${gpxTrack.get_elevation_loss()} m</li>
         </ul>
         `);
-
-
 
     })
     elevationControl.load(`tracks/${nr}.gpx`);
@@ -88,5 +91,14 @@ console.log('biketirol', BIKETIROL);
 let pulldown = document.querySelector("#pulldown")
 console.log('Pulldown:', pulldown);
 for (let track of BIKETIROL) {
-    pulldown.innerHTML += `<option>${track.nr}</option>`
+    if (selectedTrack == track.nr) {
+        selected = 'selected';
+    } else {
+        selected = '';
+    }
+    pulldown.innerHTML += `<option value="${track.nr}">${track.nr}: ${track.etappe}</option>`;
+}
+
+pulldown.onchange = () => {
+    drawTrack(pulldown.value);
 }
