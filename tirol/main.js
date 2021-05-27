@@ -53,6 +53,13 @@ const elevationControl = L.control.elevation({
 
 }).addTo(map);
 
+// Wikipedia Artikel zeichnen
+const drawWikipedia = (bounds) => {
+    console.log(bounds);
+    let url = `https://secure.geonames.org/wikipediaBoundingBoxJSON?north=${bounds.getNorth()}&south=${bounds.getSouth()}&east=${bounds.getEast()}&west=${bounds.getWest()}&username=marcelh&lang=de&maxRows=30`;
+    console.log(url)
+}
+
 // high profile plugin
 let activeElevationTrack;
 
@@ -89,6 +96,9 @@ const drawTrack = (nr) => {
         <li>Höhenmeter bergab: ${Math.round(gpxTrack.get_elevation_loss())} m</li>
         </ul>
         `);
+
+        // Wikipedia Artikel zeichnen
+        drawWikipedia(gpxTrack.getBounds());
 
     })
     elevationControl.load(`tracks/${nr}.gpx`);
