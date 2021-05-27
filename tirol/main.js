@@ -53,12 +53,11 @@ const elevationControl = L.control.elevation({
 }).addTo(map);
 
 // Wikipedia Artikel Zeichnen
-let articleDraw = {};
-
+let articleDrawn = {};
 const drawWikipedia = (bounds) => {
-    console.log(bounds);
-    let url = `https://secure.geonames.org/wikipediaBoundingBoxJSON?north=${bounds.getNorth()}&south=${bounds.getSouth()}&east=${bounds.getEast()}&west=${bounds.getWest()}&username=marcelh&lang=de&maxRows=30`;
-    console.log(url);
+    //console.log(bounds);
+    let url = `https://secure.geonames.org/wikipediaBoundingBoxJSON?north=${bounds.getNorth()}&south=${bounds.getSouth()}&east=${bounds.getEast()}&west=${bounds.getWest()}&username=webmapping&lang=de&maxRows=30`;
+    //console.log(url);
 
     let icons = {
         adm1st: "wikipedia_administration.png",
@@ -79,18 +78,18 @@ const drawWikipedia = (bounds) => {
     fetch(url).then(
         response => response.json()
     ).then(jsonData => {
-        console.log(jsonData);
+        //console.log(jsonData);
 
         // Artikel Marker erzeugen
         for (let article of jsonData.geonames) {
-            // hab ich den Artikel schon gezeichnet?
-            if (articleDraw[article.wikipediaUrl]) {
-                // Ja, nicht noch einmal zeichnen
+            // habe ich den Artikel schon gezeichnet?
+            if (articleDrawn[article.wikipediaUrl]) {
+                // Ja, nicht noch einal zeichnen
+                //console.log("schon gesehen", article.wikipediaUrl);
                 continue;
             } else {
-                articleDraw[article.wikipediaUrl] = true;
+                articleDrawn[article.wikipediaUrl] = true;
             }
-
 
             // welches Icon soll verwendet werden?
             if (icons[article.feature]) {
@@ -181,9 +180,24 @@ const drawTrack = (nr) => {
 const selectedTrack = 7;
 drawTrack(selectedTrack);
 
-// Metadaten der Etappe updaten
 const updateTexts = (nr) => {
     console.log(nr);
+    for (let etappe of BIKETIROL) {
+        //console.log(etappe);
+        // ist es die aktuelle Etappe?
+        if (etappe.nr == nr) {
+            //console.log("unsere Etappe", etappe);
+            etappe.homepage = `<a href="${etappe.weblink}">Homepage</a>`
+            for (let key in etappe) {
+                //console.log("key:", key, "value:", etappe[key]);
+                // gibt es ein Element im HTML mit der ID von "key"
+                if (document.querySelector(`#text-${key}`)) {
+                    //console.log("Juhu", key, etappe[key]);
+                    document.querySelector(`#text-${key}`).innerHTML = etappe[key];
+                }
+            }
+        }
+    }
 };
 
 // console.log('biketirol json: ', BIKETIROL);
@@ -199,7 +213,9 @@ for (let track of BIKETIROL) {
     }
     pulldown.innerHTML += `<option ${selected} value="${track.nr}">${track.nr}: ${track.etappe}</option>`;
 }
+// Metadaten der Etappe updaten
 updateTexts(pulldown.value);
+
 
 // Eventhandler fuer Aenderung des Dropdown
 pulldown.onchange = () => {
