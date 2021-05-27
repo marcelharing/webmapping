@@ -58,6 +58,18 @@ const drawWikipedia = (bounds) => {
     console.log(bounds);
     let url = `https://secure.geonames.org/wikipediaBoundingBoxJSON?north=${bounds.getNorth()}&south=${bounds.getSouth()}&east=${bounds.getEast()}&west=${bounds.getWest()}&username=marcelh&lang=de&maxRows=30`;
     console.log(url)
+
+    fetch(url).then(
+        response => response.json()
+    ).then(jsonData => {
+        console.log(jsonData)
+        	
+        // Artikel Marker erzeugen
+        for(let article of jsonData.geonames) {
+            let mrk = L.marker([article.lat, article.lng]);
+            mrk.addTo(overlays.wikipedia);
+        }
+    });
 }
 
 // high profile plugin
